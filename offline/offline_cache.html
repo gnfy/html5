@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html manifest="cache.manifest">
+<head>
+<title>Offline Cache</title>
+<meta charset="utf-8"/>
+<script type="text/javascript" src="js/j.js"></script>
+<link type="text/css" href="style/style.css" rel="stylesheet"/>
+<script type="text/javascript">
+    /**
+     * 说明：缓存更新后，改变本地缓存
+     * 依赖：改事件的监听依赖于 window.applicationCache.update() 事件, 当 update 执行后，才能触发该操作
+     */
+    window.applicationCache.addEventListener('updateready', function () {
+            window.applicationCache.swapCache();
+            console.log('swap cache has be called');
+    }, false);
+    /**
+     * 说明：定时向服务器获得更新，若有更新的话，则重新缓存本地资源
+     * 用处：若取消该项的话，可能要两次刷新才出现效果。第一次刷新时读取的依旧是本地缓存的资源，同时更新本地缓存。
+     * 不足：若使用改方法的话，则会增加服务器请求的负担
+     */ 
+    //setInterval(function(){window.applicationCache.update()}, 1000);
+</script>
+</head>
+<body>
+<div class="f_t">Offline Cache</div>
+<div><img src="image/a.png" border="0"/></div>
+</body>
+</html>
