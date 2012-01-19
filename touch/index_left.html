@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>单页测试</title>
+        <style>
+            .page {
+                /*
+                width:640px;
+                height:734px;
+                */
+                width:200px;
+                height:294px;
+                padding-top:44px;
+                text-align:center;
+                position:absolute;
+                left:-210px;
+                background:#fff;
+                -webkit-animation-duration:1s;
+                border:1px solid red;
+            }
+            .top_menu {
+                position:fixed;
+                border:1px solid #ddd;
+                width:200px;
+                height:40px;
+                z-index:1;
+                text-align:center;
+            }
+            .bottom_menu {
+                position:fixed;
+                top:302px;
+                border:1px solid #ddd;
+                width:200px;
+                height:40px;
+                z-index:1;
+                text-align:center;
+            }
+            @-webkit-keyframes showMove {
+                100% {left:8px;}
+            } 
+            @-webkit-keyframes hideMove{
+                100% {left:-210px;}
+            }
+        </style>
+        <script type="text/javascript">
+            var last_page_arr   = new Array(),
+                last_page_id    = last_page_arr[0] = 'index';
+            /**
+             * 根据css格式获得对象
+             *
+             * @param   string      val     css格式
+             * @return  array               对应css的对象集合
+             */
+            function G(val) {
+                return document.querySelectorAll(val);
+            }
+            /**
+             * 显示页面
+             *
+             * @param   string      val     要显示的对应元素ID
+             */
+            function show_page(val) {
+                var this_dom = G('#' + val)[0];
+                var last_dom = G('#' + last_page_id)[0];
+                var t_left   = this_dom.style.left;
+                var l_left   = last_dom.style.left;
+                t_left       = t_left ? t_left : '-210px';
+                l_left       = l_left ? l_left : '-210px';
+                this_dom.style.cssText = 'left:' + t_left + ';-webkit-animation-name:showMove';
+                last_dom.style.cssText = 'left:' + l_left + ';-webkit-animation-name:hideMove';
+                setTimeout( function() {
+                    last_dom.style.cssText = 'left:-210px';
+                    this_dom.style.cssText = 'left:8px';
+                }, 999);
+                last_page_id = val;
+            }
+        </script>
+    </head>
+    <body>
+        <div class="top_menu"><input type="button" value="返回"/></div>
+        <div class="page" id="index" style="left:8px">
+            <div>
+                <div>第一页</div>
+                <input type="button" value="第二页" onclick="show_page('second')"/>
+                <input type="button" value="第三页" onclick="show_page('three')"/>
+                <input type="button" value="第四页" onclick="show_page('four')"/>
+            </div>
+        </div>
+        <div class="page" id="second">
+            <div>
+                <div>第二页</div>
+                <input type="button" value="第一页" onclick="show_page('index')"/>
+                <input type="button" value="第三页" onclick="show_page('three')"/>
+                <input type="button" value="第四页" onclick="show_page('four')"/>
+            </div>
+        </div>
+        <div class="page" id="three">
+            <div>
+                <div>第三页</div>
+                <input type="button" value="第一页" onclick="show_page('index')"/>
+                <input type="button" value="第二页" onclick="show_page('second')"/>
+                <input type="button" value="第四页" onclick="show_page('four')"/>
+            </div>
+        </div>
+        <div class="page" id="four">
+            <div>
+                <div>第四页</div>
+                <input type="button" value="第一页" onclick="show_page('index')"/>
+                <input type="button" value="第二页" onclick="show_page('second')"/>
+                <input type="button" value="第三页" onclick="show_page('three')"/>
+            </div>
+        </div>
+        <div class="bottom_menu"><input type="button" value="首页"/><input type="button" value="开奖"/></div>
+    </body>
+</html>

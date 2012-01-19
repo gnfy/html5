@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>单页测试</title>
+        <style>
+            .page {
+                /*
+                width:640px;
+                height:734px;
+                */
+                width:200px;
+                height:294px;
+                padding-top:40px;
+                float:left;
+                text-align:center;
+            }
+            .show_page {
+                display:block;
+                width:200px;
+                height:294px;
+                overflow:hidden;
+            }
+            .container_page {
+                width:600px;
+                -webkit-transition:all .8s ease-in-out;
+            }
+            .top_menu {
+                position:absolute;
+                border:1px solid #ddd;
+                width:200px;
+                height:40px;
+                text-align:center;
+            }
+            .bottom_menu {
+                position:absolute;
+                top:302px;
+                border:1px solid #ddd;
+                width:200px;
+                height:40px;
+                text-align:center;
+            }
+        </style>
+        <script type="text/javascript">
+            var last_page_arr   = new Array(),
+                last_page_id    = last_page_arr[0] = 'index',
+                history_max     = 3;
+            /**
+             * 根据css格式获得对象
+             *
+             * @param   string      val     css格式
+             * @return  array               对应css的对象集合
+             */
+            function G(val) {
+                return document.querySelectorAll(val);
+            }
+            /**
+             * 显示页面
+             *
+             * @param   string      val     要显示的对应元素ID
+             */
+            function show_page(val) {
+                visit_history(val);
+                var last_len    = last_page_arr.length,
+                    html_val    = '', 
+                    con_dom     = G('.container_page')[0],
+                    this_index  = last_index = 0, 
+                    html_val    = con_dom.innerHTML = '';
+                for (var i = 0; i < last_len; i++) {
+                    this_index = last_page_arr[i] == val ? i : this_index;
+                    last_index = last_page_arr[i] == last_page_id ? i : last_index;
+                    html_val += '<div class="page">' + G('#'+last_page_arr[i])[0].innerHTML + '</div>'
+                }
+                con_dom.innerHTML = html_val;
+                var x_val = -this_index * 200;
+                con_dom.style.cssText = '-webkit-transform: translate(' + x_val + 'px, 0px)';
+                last_page_id = val;
+            }
+            /**
+             * 访问历史记录
+             *
+             * @param   string      val     页面的ID
+             */
+            function visit_history(val) {
+                var len = last_page_arr.length;
+                var pos = -1;
+                for (var i = 0; i < len; i++) {
+                    pos = last_page_arr[i] == val ? i : pos; 
+                }
+                //var con_dom = G('.container_page')[0];
+                if ( pos >= 0 ) {
+                     //last_page_arr.splice(pos, 1);
+                     //last_page_arr.splice(1, 0, val);
+                    if ( pos > 1 ) {
+                        var t_val = last_page_arr.shift();
+                        last_page_arr.push(t_val);
+                        // con_dom.style.cssText = '-webkit-transform: translate(-200px, 0px)';
+                        index_refix = 2;
+                    }
+                    //last_page_arr.push(val);
+                } else {
+                    if ( len == history_max ) {
+                        // con_dom.style.cssText = '-webkit-transform: translate(-200px, 0px)';
+                        last_page_arr.shift();
+                    }
+                    last_page_arr.push(val);
+                    index_refix = 1;
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="top_menu"><input type="button" value="返回"/></div>
+        <div class="show_page">
+            <div class="container_page">
+                <div class="page">
+                    <div>
+                        <div>第一页</div>
+                        <input type="button" value="第二页" onclick="show_page('second')"/>
+                        <input type="button" value="第三页" onclick="show_page('three')"/>
+                        <input type="button" value="第四页" onclick="show_page('four')"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom_menu"><input type="button" value="首页"/><input type="button" value="开奖"/></div>
+        <div style="display:none">
+            <div class="page" id="index">
+                <div>
+                    <div>第一页</div>
+                    <input type="button" value="第二页" onclick="show_page('second')"/>
+                    <input type="button" value="第三页" onclick="show_page('three')"/>
+                    <input type="button" value="第四页" onclick="show_page('four')"/>
+                </div>
+            </div>
+            <div class="page" id="second">
+                <div>
+                    <div>第二页</div>
+                    <input type="button" value="第一页" onclick="show_page('index')"/>
+                    <input type="button" value="第三页" onclick="show_page('three')"/>
+                    <input type="button" value="第四页" onclick="show_page('four')"/>
+                </div>
+            </div>
+            <div class="page" id="three">
+                <div>
+                    <div>第三页</div>
+                    <input type="button" value="第一页" onclick="show_page('index')"/>
+                    <input type="button" value="第二页" onclick="show_page('second')"/>
+                    <input type="button" value="第四页" onclick="show_page('four')"/>
+                </div>
+            </div>
+            <div class="page" id="four">
+                <div>
+                    <div>第四页</div>
+                    <input type="button" value="第一页" onclick="show_page('index')"/>
+                    <input type="button" value="第二页" onclick="show_page('second')"/>
+                    <input type="button" value="第三页" onclick="show_page('three')"/>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
